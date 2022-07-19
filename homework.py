@@ -6,7 +6,6 @@ import requests
 from http import HTTPStatus
 from telegram import Bot
 from dotenv import load_dotenv
-from logging import StreamHandler
 
 load_dotenv()
 
@@ -34,13 +33,13 @@ HOMEWORK_STATUSES = {
 
 
 def send_message(bot, message) -> list:
-    """Отправляет сообщение о статусе домашней работы"""
+    """Отправляет сообщение о статусе домашней работы."""
     logger.info("Отправялем сообщение пользователю")
     bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
 
 
 def get_api_answer(current_timestamp: int) -> list:
-    """Возвращает ответ API, преобразовав его к формату JSON"""
+    """Возвращает ответ API, преобразовав его к формату JSON."""
     logger.info("Возвращаем ответ API")
     timestamp = current_timestamp
     params = {'from_date': timestamp}
@@ -61,8 +60,8 @@ def get_api_answer(current_timestamp: int) -> list:
 
 def check_response(response: list) -> list:
     """
-    Проверяет ответ API на корректность и
-    возвращает список домашних работ
+    Проверяет ответ API на корректность.
+    Возвращает список домашних работ.
     """
     logger.info("Проверка ответа API")
     try:
@@ -76,10 +75,9 @@ def check_response(response: list) -> list:
 
 def parse_status(homework: dict) -> str:
     """
-    Извлекает из информации о конкретной домашней работе
-    статус этой работы. И  В случае успеха, функция возвращает
-    подготовленную для отправки в Telegram строку,
-    содержащую один из вердиктов словаря HOMEWORK_STATUSES
+    Извлекает из информации о конкретной домашней работе.
+    Статус этой работы. И возвращает троку, содержащую один
+    из вердиктов словаря HOMEWORK_STATUSES.
     """
     logger.info("Извлекаем информацию о домашней работе")
     homework_name = homework["homework_name"]
@@ -90,7 +88,7 @@ def parse_status(homework: dict) -> str:
 
 
 def check_tokens() -> bool:
-    """Проверяем доступность переменных окружения"""
+    """Проверяем доступность переменных окружения."""
     logger.info("Проверка обязательных переменных окружения")
     if (
         PRACTICUM_TOKEN is None
