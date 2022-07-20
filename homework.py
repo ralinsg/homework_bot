@@ -8,6 +8,8 @@ import requests
 from dotenv import load_dotenv
 from telegram import Bot
 
+from errors import ErrorsStatuscode
+
 load_dotenv()
 
 """Создаем логгер"""
@@ -54,7 +56,7 @@ def get_api_answer(current_timestamp: int) -> list:
     if api_response.status_code == HTTPStatus.OK:
         return api_response.json()
     elif api_response.status_code != 200:
-        raise ConnectionError("Ошибка статус кода")
+        raise errors.ErrorsStatuscode("Ошибка статус кода")
 
 
 def check_response(response: list) -> list:
