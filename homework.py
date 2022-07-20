@@ -6,7 +6,7 @@ from http import HTTPStatus
 
 import requests
 from dotenv import load_dotenv
-from errors import ErrorsStatuscode
+from errors import ErrorsStatuscode, ErrorsText
 from telegram import Bot
 
 load_dotenv()
@@ -40,36 +40,42 @@ def send_message(bot, message) -> list:
     try:
         bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
     except Exception:
-        logger.error("Ошибка отправки сообщения в телеграм")
+        raise ErrorsText("Ошибка отправки сообщения в телеграм")
 
 
-def get_api_answer(current_timestamp: int) -> list:
+def get_api_answer(current_timestamp: int) -> dict:
     """Возвращает ответ API, преобразовав его к формату JSON."""
     logger.info("Возвращаем ответ API")
     timestamp = current_timestamp
     params = {"from_date": timestamp}
-    api_response = requests.get(
+    response = requests.get(
         url=ENDPOINT,
         headers=HEADERS,
         params=params)
-    if api_response.status_code == HTTPStatus.OK:
-        return api_response.json()
-    elif api_response.status_code != 200:
+    if response.status_code == HTTPStatus.OK:
+        return response.json()
+    elif response.status_code != 200:
         raise ErrorsStatuscode("Ошибка статус кода")
 
 
-def check_response(response: list) -> list:
+def check_response(response: dict) -> list:
     """
     Проверяет ответ API на корректность.
     Возвращает список домашних работ.
     """
     logger.info("Проверка ответа API")
-    homeworks_list = response["homeworks"]
     if not isinstance(response, dict):
-        raise ConnectionError("Ошибка ответа API")
-    if not isinstance(homeworks_list, list):
-        raise KeyError(f"Ошибка доступа по ключу {homeworks_list}")
-    return homeworks_list
+        raise TypeError("Неверный тип данных")
+    if "homeworks" not in response:
+        raise KeyError()
+    homeworks = response.get("homeworks")
+    if not isinstance(homeworks, list):
+        raise TypeError(f"Ошибка доступа по ключу {homeworks}")
+    elif len(homeworks) == 0:
+        raise ValueError("Пустой словарь")
+
+    return homeworks
+
 
 
 def parse_status(homework: dict) -> str:
