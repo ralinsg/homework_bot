@@ -77,7 +77,6 @@ def check_response(response: dict) -> list:
     return homeworks
 
 
-
 def parse_status(homework: dict) -> str:
     """
     Извлекает из информации о конкретной домашней работе.
