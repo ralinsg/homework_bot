@@ -45,7 +45,7 @@ py -3.7 -m venv venv
 ```
 Активировать виртуальное окружение:
 ```bash
- source env/bin/activate
+ source venv/bin/activate
 ```
 Установить зависимости из файла requirements.txt:
 ```bash
