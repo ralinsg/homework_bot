@@ -67,5 +67,5 @@ TELEGRAM_CHAT_ID=<Ваш id в telegramm>
 
 ## Автор
 
-- [@ralinsg](https://github.com/ralinsg)
+- Ралин Сергей [@ralinsg](https://github.com/ralinsg)
 
